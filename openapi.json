@@ -1,0 +1,1174 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/users/profile": {
+      "get": {
+        "tags": ["user-controller"],
+        "summary": "Ambil profil pengguna",
+        "description": "Mengambil informasi profil dari pengguna yang sedang login.",
+        "operationId": "getProfile",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profil berhasil diambil",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Akses tidak sah",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["user-controller"],
+        "summary": "Perbarui profil pengguna",
+        "description": "Memungkinkan pengguna yang sedang login untuk memperbarui profil mereka.",
+        "operationId": "updateProfile",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Profil berhasil diperbarui",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Data profil tidak valid",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Akses tidak sah",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/password": {
+      "put": {
+        "tags": ["user-controller"],
+        "summary": "Ubah kata sandi pengguna",
+        "description": "Memungkinkan pengguna yang sedang login untuk mengubah kata sandi mereka.",
+        "operationId": "changePassword",
+        "parameters": [
+          {
+            "name": "newPassword",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Kata sandi berhasil diubah"
+          },
+          "400": {
+            "description": "Format kata sandi tidak valid"
+          },
+          "401": {
+            "description": "Akses tidak sah"
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server"
+          }
+        }
+      }
+    },
+    "/mutations/edit/{requestId}": {
+      "put": {
+        "tags": ["mutation-request-controller"],
+        "summary": "Edit permintaan mutasi",
+        "description": "Mengizinkan pengguna untuk mengedit permintaan mutasi yang masih dalam status pending.",
+        "operationId": "editMutationRequest",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MutationRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Permintaan berhasil diperbarui",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationRequestDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Permintaan tidak dapat diperbarui karena tidak dalam status pending",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationRequestDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Permintaan mutasi tidak ditemukan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationRequestDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Kesalahan server internal",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationRequestDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/approval-letters/edit/{approvalLetterId}": {
+      "put": {
+        "tags": ["approval-letter-controller"],
+        "summary": "Edit surat persetujuan",
+        "description": "Memperbarui nomor persetujuan dan isi surat persetujuan.",
+        "operationId": "editApprovalLetter",
+        "parameters": [
+          {
+            "name": "approvalLetterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Surat persetujuan berhasil diperbarui",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalLetterDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Surat persetujuan tidak ditemukan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalLetterDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalLetterDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mutations": {
+      "get": {
+        "tags": ["mutation-request-controller"],
+        "summary": "Ambil permintaan mutasi pengguna",
+        "description": "Mengambil permintaan mutasi yang diajukan oleh pengguna yang sedang login.",
+        "operationId": "getUserMutationRequests",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permintaan mutasi berhasil diambil",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MutationRequestDTO"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Kesalahan server internal",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MutationRequestDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["mutation-request-controller"],
+        "summary": "Ajukan permintaan mutasi",
+        "description": "Mengizinkan pengguna untuk mengajukan permintaan mutasi baru.",
+        "operationId": "submitMutationRequest",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MutationRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Permintaan mutasi berhasil dibuat",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationRequestDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Data permintaan tidak valid",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationRequestDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Kesalahan server internal",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationRequestDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mutations/reject/{requestId}": {
+      "post": {
+        "tags": ["mutation-request-controller"],
+        "summary": "Tolak permintaan mutasi",
+        "description": "Menolak permintaan mutasi berdasarkan ID. Hanya untuk admin.",
+        "operationId": "rejectRequest",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permintaan berhasil ditolak",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Permintaan mutasi tidak ditemukan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Kesalahan server internal",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mutations/approve/{requestId}": {
+      "post": {
+        "tags": ["mutation-request-controller"],
+        "summary": "Setujui permintaan mutasi",
+        "description": "Menyetujui permintaan mutasi berdasarkan ID. Hanya untuk admin.",
+        "operationId": "approveRequest",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permintaan berhasil disetujui",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Permintaan mutasi tidak ditemukan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Kesalahan server internal",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["auth-controller"],
+        "summary": "Registrasi pengguna baru",
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Pengguna berhasil didaftarkan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Permintaan tidak valid, data input tidak sesuai",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Konflik, username sudah ada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth-controller"],
+        "summary": "Masuk untuk mendapatkan token JWT",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login berhasil, token JWT dikembalikan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Username atau password salah",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/approval-letters/create": {
+      "post": {
+        "tags": ["approval-letter-controller"],
+        "summary": "Buat surat persetujuan baru",
+        "description": "Membuat surat persetujuan untuk permohonan mutasi tertentu jika disetujui.",
+        "operationId": "createApprovalLetter",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Surat persetujuan berhasil dibuat",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalLetterDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input tidak valid",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalLetterDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Permohonan mutasi tidak ditemukan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalLetterDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalLetterDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/all": {
+      "get": {
+        "tags": ["user-controller"],
+        "summary": "Ambil semua pengguna",
+        "description": "Memungkinkan admin untuk mengambil daftar semua pengguna.",
+        "operationId": "getAllUsers",
+        "responses": {
+          "200": {
+            "description": "Daftar pengguna berhasil diambil",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDTO"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Akses ditolak",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDTO"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mutations/all": {
+      "get": {
+        "tags": ["mutation-request-controller"],
+        "summary": "Ambil semua permintaan mutasi",
+        "description": "Mengambil semua permintaan mutasi. Hanya untuk admin.",
+        "operationId": "getAllMutationRequests",
+        "responses": {
+          "200": {
+            "description": "Permintaan mutasi berhasil diambil",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MutationRequestDTO"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Kesalahan server internal",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MutationRequestDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/approval-letters": {
+      "get": {
+        "tags": ["approval-letter-controller"],
+        "summary": "Ambil semua surat persetujuan",
+        "description": "Mengambil semua surat persetujuan.",
+        "operationId": "getAllApprovalLetters",
+        "responses": {
+          "200": {
+            "description": "Daftar surat persetujuan berhasil diambil",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalLetterDTO"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalLetterDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/approval-letters/user": {
+      "get": {
+        "tags": ["approval-letter-controller"],
+        "summary": "Ambil surat persetujuan untuk pengguna",
+        "description": "Mengambil surat persetujuan yang terkait dengan pengguna yang sedang login.",
+        "operationId": "getApprovalLettersForUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Daftar surat persetujuan pengguna berhasil diambil",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalLetterDTO"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pengguna tidak ditemukan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalLetterDTO"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApprovalLetterDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/delete": {
+      "delete": {
+        "tags": ["user-controller"],
+        "summary": "Hapus akun pengguna",
+        "description": "Memungkinkan pengguna yang sedang login untuk menghapus akun mereka.",
+        "operationId": "deleteAccount",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Akun berhasil dihapus"
+          },
+          "401": {
+            "description": "Akses tidak sah"
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server"
+          }
+        }
+      }
+    },
+    "/mutations/delete/{requestId}": {
+      "delete": {
+        "tags": ["mutation-request-controller"],
+        "summary": "Hapus permintaan mutasi",
+        "description": "Mengizinkan pengguna untuk menghapus permintaan mutasi yang masih dalam status pending.",
+        "operationId": "deleteMutationRequest",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permintaan berhasil dihapus",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Permintaan tidak dapat dihapus karena tidak dalam status pending",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Permintaan mutasi tidak ditemukan",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Kesalahan server internal",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/approval-letters/delete/{approvalLetterId}": {
+      "delete": {
+        "tags": ["approval-letter-controller"],
+        "summary": "Hapus surat persetujuan",
+        "description": "Menghapus surat persetujuan berdasarkan ID.",
+        "operationId": "deleteApprovalLetter",
+        "parameters": [
+          {
+            "name": "approvalLetterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Surat persetujuan berhasil dihapus"
+          },
+          "404": {
+            "description": "Surat persetujuan tidak ditemukan"
+          },
+          "500": {
+            "description": "Terjadi kesalahan pada server"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserDTO": {
+        "required": [
+          "jabatan",
+          "name",
+          "nip",
+          "password",
+          "unitKerja",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "maxLength": 20,
+            "minLength": 4,
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 6,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nip": {
+            "type": "string"
+          },
+          "jabatan": {
+            "type": "string"
+          },
+          "unitKerja": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["USER", "ADMIN"]
+          }
+        }
+      },
+      "MutationRequestDTO": {
+        "required": [
+          "jabatanTujuan",
+          "kabupatenTujuan",
+          "provinsiTujuan",
+          "unitKerjaTujuan"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "provinsiTujuan": {
+            "type": "string"
+          },
+          "kabupatenTujuan": {
+            "type": "string"
+          },
+          "jabatanTujuan": {
+            "type": "string"
+          },
+          "unitKerjaTujuan": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "applicantName": {
+            "type": "string"
+          }
+        }
+      },
+      "ApprovalLetterDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "approvalNumber": {
+            "type": "string"
+          },
+          "letterContent": {
+            "type": "string"
+          },
+          "mutationRequestId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "MutationRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "provinsiTujuan": {
+            "type": "string"
+          },
+          "kabupatenTujuan": {
+            "type": "string"
+          },
+          "jabatanTujuan": {
+            "type": "string"
+          },
+          "unitKerjaTujuan": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nip": {
+            "type": "string"
+          },
+          "jabatan": {
+            "type": "string"
+          },
+          "unitKerja": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["USER", "ADMIN"]
+          },
+          "mutationRequests": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MutationRequest"
+            }
+          }
+        }
+      },
+      "LoginRequestDTO": {
+        "required": ["password", "username"],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
